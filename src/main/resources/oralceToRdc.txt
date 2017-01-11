@@ -1,0 +1,6 @@
+LOGIN_NAME  account
+PASSWORD    password
+NAME    realname
+EMAIL   email
+MOBILE  mobile
+PHONE   phone

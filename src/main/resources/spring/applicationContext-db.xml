@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+            http://www.springframework.org/schema/beans/spring-beans.xsd
+            http://www.springframework.org/schema/context
+			http://www.springframework.org/schema/context/spring-context-4.1.xsd">
+
+    <context:property-placeholder location="classpath:dbconfig.properties"/>
+
+    <bean id="gitlabDataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+        <property name="driverClassName">
+            <value>${gitlab.driver}</value>
+        </property>
+        <property name="url">
+            <value>${gitlab.url}</value>
+        </property>
+        <property name="username">
+            <value>${gitlab.username}</value>
+        </property>
+        <property name="password">
+            <value>${gitlab.password}</value>
+        </property>
+    </bean>
+
+    <bean id="zentaoDataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+        <property name="driverClassName">
+            <value>${zentao.driver}</value>
+        </property>
+        <property name="url">
+            <value>${zentao.url}</value>
+        </property>
+        <property name="username">
+            <value>${zentao.username}</value>
+        </property>
+        <property name="password">
+            <value>${zentao.password}</value>
+        </property>
+    </bean>
+
+    <bean id="oracleDataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+        <property name="driverClassName">
+            <value>${oracle.driver}</value>
+        </property>
+        <property name="url">
+            <value>${oracle.url}</value>
+        </property>
+        <property name="username">
+            <value>${oracle.username}</value>
+        </property>
+        <property name="password">
+            <value>${oracle.password}</value>
+        </property>
+    </bean>
+
+    <bean id="dynamicDataSource" class="com.hand.util.DynamicDataSource">
+        <property name="targetDataSources">
+            <map key-type="java.lang.String">
+                <entry value-ref="gitlabDataSource" key="gitlab"></entry>
+                <entry value-ref="zentaoDataSource" key="zentao"></entry>
+                <entry value-ref="oracleDataSource" key="oracle"></entry>
+            </map>
+        </property>
+        <property name="defaultTargetDataSource" ref="oracleDataSource" ></property>
+    </bean>
+
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dynamicDataSource"></property>
+        <property name="configLocation" value="classpath:mybatis/mapConfig.xml" />
+    </bean>
+
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.hand.mapper"></property>
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"></property>
+    </bean>
+</beans>

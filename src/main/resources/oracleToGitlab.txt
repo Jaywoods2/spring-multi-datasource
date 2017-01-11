@@ -1,0 +1,3 @@
+NAME    name
+EMAIL   email
+PASSWORD    encrypted_password
