@@ -9,7 +9,7 @@ NAME    name
 EMAIL   email
 PASSWORD    encrypted_password
 ```
-前折表示oralce数据库字段，后者表示mysql数据库表字段，用tab或多个空格分隔。
+> 前者表示oralce数据库字段，后者表示mysql数据库表字段，用tab或多个空格分隔。
 
 3. 运行(需要maven和jdk)
 ```
